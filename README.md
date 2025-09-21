@@ -3,11 +3,11 @@ Flutter full screen cupertino page transition
 # Forked from
 https://pub.dev/packages/swipeable_page_route
 
-
 https://github.com/JonasWanke/swipeable_page_route
 
-# Screenshots
-todo
+modified
+* Solved the issue of full screen return failure when a new page contains scrolling components such as TabView or PageView
+* 解决了当新页面包含 TabView 或 PageView 等滚动组件时，全屏返回失效的问题
 
 # Usage
 ```yaml

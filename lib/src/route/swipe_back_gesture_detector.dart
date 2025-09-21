@@ -7,7 +7,7 @@ import 'package:swipe_page_route/src/gestures/page_drag_mixin.dart';
 import 'package:swipe_page_route/src/gestures/page_drag_recognizer.dart';
 import 'package:swipe_page_route/src/route/swipe_back_gesture_controller.dart';
 
-/// copied from [_CupertinoBackGestureDetector]
+// Copied and modified from [_CupertinoBackGestureDetector]
 class SwipeBackGestureDetector<T> extends StatefulWidget {
   final ValueGetter<bool> canOnlySwipeFromEdge;
   final ValueGetter<double> backGestureDetectionWidth;

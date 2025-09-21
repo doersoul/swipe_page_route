@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const double _kMinFlingVelocity = 1;
 
-/// copied from [_CupertinoBackGestureController]
+// Copied from [_CupertinoBackGestureController]
 class SwipeBackGestureController<T> {
   final AnimationController controller;
   final NavigatorState navigator;
