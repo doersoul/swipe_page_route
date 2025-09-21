@@ -45,11 +45,7 @@ class _SwipeBackGestureDetectorState<T>
   }
 
   void _handleDragStart([DragStartDetails? details]) {
-    if (!mounted) {
-      return;
-    }
-
-    if (!widget.enabledCallback()) {
+    if (!mounted || !widget.enabledCallback()) {
       return;
     }
 
