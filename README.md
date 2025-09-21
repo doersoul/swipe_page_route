@@ -29,7 +29,7 @@ ThemeData(
 );
 ```
 
-case 2: when context push
+case 2: when navigator push
 ```dart
 final PageRoute<T> route = SwipePageRoute<T>(
   canOnlySwipeFromEdge: canOnlySwipeFromEdge,
