@@ -44,7 +44,7 @@ class _SwipeBackGestureDetectorState<T>
     _screenWidth = MediaQuery.sizeOf(context).width;
   }
 
-  void _handleDragStart([DragStartDetails? details]) {
+  void _handleDragStart(_) {
     if (!mounted || !widget.enabledCallback()) {
       return;
     }
@@ -160,7 +160,7 @@ class _SwipeBackGestureDetectorState<T>
       },
       child: PageDragListener(
         parentState: this,
-        onStart: (_) => _handleDragStart(),
+        onStart: _handleDragStart,
         onUpdate: _handleDragUpdate,
         onEnd: _handleDragEnd,
         child: widget.child,
