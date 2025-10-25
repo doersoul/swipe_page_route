@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:swipe_page_route/src/route/cupertino_back_gesture_detector.dart';
 import 'package:swipe_page_route/src/route/swipe_back_gesture_controller.dart';
 import 'package:swipe_page_route/src/route/swipe_back_gesture_detector.dart';
 
@@ -13,13 +13,7 @@ typedef SwipeTransitionBuilder =
     );
 
 class SwipePageRoute<T> extends CupertinoPageRoute<T> {
-  bool canSwipe;
-
   bool canOnlySwipeFromEdge;
-
-  double backGestureDetectionWidth;
-
-  double backGestureDetectionStartOffset;
 
   final Duration? _transitionDuration;
 
@@ -28,10 +22,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
   final SwipeTransitionBuilder transitionBuilder;
 
   SwipePageRoute({
-    this.canSwipe = true,
     this.canOnlySwipeFromEdge = false,
-    this.backGestureDetectionWidth = kMinInteractiveDimension,
-    this.backGestureDetectionStartOffset = 0.0,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     SwipeTransitionBuilder? transitionBuilder,
@@ -77,28 +68,32 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    ValueGetter<bool> canSwipe = _defaultCanSwipe,
     ValueGetter<bool> canOnlySwipeFromEdge = _defaultCanOnlySwipeFromEdge,
-    ValueGetter<double> backGestureDetectionWidth =
-        _defaultBackGestureDetectionWidth,
-    ValueGetter<double> backGestureDetectionStartOffset =
-        _defaultBackGestureDetectionStartOffset,
     SwipeTransitionBuilder? transitionBuilder,
   }) {
     final Widget wrappedChild;
 
-    // todo check route.isFirst
     if (route.fullscreenDialog || route.isFirst) {
       wrappedChild = child;
     } else {
-      wrappedChild = SwipeBackGestureDetector<T>(
-        enabledCallback: () => _isPopGestureEnabled(route, canSwipe()),
-        onStartPopGesture: () => _startPopGesture(route),
-        canOnlySwipeFromEdge: canOnlySwipeFromEdge,
-        backGestureDetectionWidth: backGestureDetectionWidth,
-        backGestureDetectionStartOffset: backGestureDetectionStartOffset,
-        child: child,
-      );
+      final bool onlySwipeFromEdge = canOnlySwipeFromEdge();
+      if (onlySwipeFromEdge) {
+        wrappedChild = CupertinoBackGestureDetector<T>(
+          enabledCallback: () => _isPopGestureEnabled(route),
+          onStartPopGesture: () => _startPopGesture(route),
+          child: child,
+        );
+      } else {
+        wrappedChild = CupertinoBackGestureDetector<T>(
+          enabledCallback: () => _isPopGestureEnabled(route),
+          onStartPopGesture: () => _startPopGesture(route),
+          child: SwipeBackGestureDetector<T>(
+            enabledCallback: () => _isPopGestureEnabled(route),
+            onStartPopGesture: () => _startPopGesture(route),
+            child: child,
+          ),
+        );
+      }
     }
 
     transitionBuilder ??= defaultTransitionBuilder(route.fullscreenDialog);
@@ -112,16 +107,10 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     );
   }
 
-  static bool _defaultCanSwipe() => true;
-
   static bool _defaultCanOnlySwipeFromEdge() => false;
 
-  static double _defaultBackGestureDetectionWidth() => kMinInteractiveDimension;
-
-  static double _defaultBackGestureDetectionStartOffset() => 0;
-
   // Copied and modified from `CupertinoRouteTransitionMixin`
-  static bool _isPopGestureEnabled<T>(PageRoute<T> route, bool canSwipe) {
+  static bool _isPopGestureEnabled<T>(PageRoute<T> route) {
     if (route.isFirst) {
       return false;
     }
@@ -151,10 +140,6 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       return false;
     }
 
-    if (!canSwipe) {
-      return false;
-    }
-
     return true;
   }
 
@@ -176,7 +161,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       _reverseTransitionDuration ?? super.reverseTransitionDuration;
 
   @override
-  bool get popGestureEnabled => _isPopGestureEnabled(this, canSwipe);
+  bool get popGestureEnabled => _isPopGestureEnabled(this);
 
   @override
   Widget buildTransitions(
@@ -191,10 +176,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       animation,
       secondaryAnimation,
       child,
-      canSwipe: () => canSwipe,
       canOnlySwipeFromEdge: () => canOnlySwipeFromEdge,
-      backGestureDetectionWidth: () => backGestureDetectionWidth,
-      backGestureDetectionStartOffset: () => backGestureDetectionStartOffset,
       transitionBuilder: transitionBuilder,
     );
   }

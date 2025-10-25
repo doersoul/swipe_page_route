@@ -3,14 +3,10 @@ import 'package:swipe_page_route/src/route/swipe_page_route.dart';
 
 class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
   final bool canOnlySwipeFromEdge;
-  final double backGestureDetectionWidth;
-  final double backGestureDetectionStartOffset;
   final SwipeTransitionBuilder? transitionBuilder;
 
   const SwipePageTransitionsBuilder({
     this.canOnlySwipeFromEdge = false,
-    this.backGestureDetectionWidth = kMinInteractiveDimension,
-    this.backGestureDetectionStartOffset = 0,
     this.transitionBuilder,
   });
 
@@ -29,8 +25,6 @@ class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
       secondaryAnimation,
       child,
       canOnlySwipeFromEdge: () => canOnlySwipeFromEdge,
-      backGestureDetectionWidth: () => backGestureDetectionWidth,
-      backGestureDetectionStartOffset: () => backGestureDetectionStartOffset,
       transitionBuilder: transitionBuilder,
     );
   }

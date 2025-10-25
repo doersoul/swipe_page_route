@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_page_route/src/gestures/page_drag_listener.dart';
@@ -9,18 +7,12 @@ import 'package:swipe_page_route/src/route/swipe_back_gesture_controller.dart';
 
 // Copied and modified from [_CupertinoBackGestureDetector]
 class SwipeBackGestureDetector<T> extends StatefulWidget {
-  final ValueGetter<bool> canOnlySwipeFromEdge;
-  final ValueGetter<double> backGestureDetectionWidth;
-  final ValueGetter<double> backGestureDetectionStartOffset;
   final ValueGetter<bool> enabledCallback;
   final ValueGetter<SwipeBackGestureController<T>?> onStartPopGesture;
   final Widget child;
 
   const SwipeBackGestureDetector({
     super.key,
-    required this.canOnlySwipeFromEdge,
-    required this.backGestureDetectionWidth,
-    required this.backGestureDetectionStartOffset,
     required this.enabledCallback,
     required this.onStartPopGesture,
     required this.child,
@@ -108,17 +100,6 @@ class _SwipeBackGestureDetectorState<T>
     };
   }
 
-  double _dragAreaWidth(BuildContext context, TextDirection textDirection) {
-    final EdgeInsets padding = MediaQuery.paddingOf(context);
-
-    final double dragAreaWidth = switch (Directionality.of(context)) {
-      TextDirection.ltr => padding.left,
-      TextDirection.rtl => padding.right,
-    };
-
-    return math.max(dragAreaWidth, widget.backGestureDetectionWidth());
-  }
-
   PageDragRecognizer _gestureRecognizerConstructor() {
     final TextDirection textDirection = Directionality.of(context);
 
@@ -128,12 +109,7 @@ class _SwipeBackGestureDetectorState<T>
       checkStartedCallback: () =>
           _backGestureController != null || dragUnderway,
       enabledCallback: widget.enabledCallback,
-      detectionArea: () => widget.canOnlySwipeFromEdge()
-          ? (
-              startOffset: widget.backGestureDetectionStartOffset(),
-              width: _dragAreaWidth(context, textDirection),
-            )
-          : null,
+      detectionArea: () => null,
     );
   }
 
