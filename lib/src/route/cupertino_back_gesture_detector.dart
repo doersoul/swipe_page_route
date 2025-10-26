@@ -94,8 +94,7 @@ class _CupertinoBackGestureDetectorState<T>
 
   void _handleDragCancel() {
     assert(mounted);
-    // This can be called even if start is not called, paired with the "down" event
-    // that we don't consider here.
+
     _backGestureController?.dragEnd(0.0);
     _backGestureController = null;
   }
@@ -117,8 +116,6 @@ class _CupertinoBackGestureDetectorState<T>
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
 
-    // For devices with notches, the drag area needs to be larger on the side
-    // that has the notch.
     final double dragAreaWidth = switch (Directionality.of(context)) {
       TextDirection.rtl => MediaQuery.paddingOf(context).right,
       TextDirection.ltr => MediaQuery.paddingOf(context).left,

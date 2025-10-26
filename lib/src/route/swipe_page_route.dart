@@ -13,7 +13,7 @@ typedef SwipeTransitionBuilder =
     );
 
 class SwipePageRoute<T> extends CupertinoPageRoute<T> {
-  bool canOnlySwipeFromEdge;
+  bool swipeFromEdge;
 
   final Duration? _transitionDuration;
 
@@ -22,7 +22,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
   final SwipeTransitionBuilder transitionBuilder;
 
   SwipePageRoute({
-    this.canOnlySwipeFromEdge = false,
+    this.swipeFromEdge = false,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     SwipeTransitionBuilder? transitionBuilder,
@@ -68,7 +68,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    bool canOnlySwipeFromEdge = false,
+    bool swipeFromEdge = false,
     SwipeTransitionBuilder? transitionBuilder,
   }) {
     final Widget wrappedChild;
@@ -76,7 +76,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     if (route.fullscreenDialog || route.isFirst) {
       wrappedChild = child;
     } else {
-      if (!canOnlySwipeFromEdge) {
+      if (!swipeFromEdge) {
         wrappedChild = CupertinoBackGestureDetector<T>(
           enabledCallback: () => _isPopGestureEnabled(route),
           onStartPopGesture: () => _startPopGesture(route),
@@ -175,7 +175,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       animation,
       secondaryAnimation,
       child,
-      canOnlySwipeFromEdge: canOnlySwipeFromEdge,
+      swipeFromEdge: swipeFromEdge,
       transitionBuilder: transitionBuilder,
     );
   }

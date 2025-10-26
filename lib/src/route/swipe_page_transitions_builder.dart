@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:swipe_page_route/src/route/swipe_page_route.dart';
 
 class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
-  final bool canOnlySwipeFromEdge;
+  final bool swipeFromEdge;
   final SwipeTransitionBuilder? transitionBuilder;
 
   const SwipePageTransitionsBuilder({
-    this.canOnlySwipeFromEdge = false,
+    this.swipeFromEdge = false,
     this.transitionBuilder,
   });
 
@@ -24,7 +24,7 @@ class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
       animation,
       secondaryAnimation,
       child,
-      canOnlySwipeFromEdge: canOnlySwipeFromEdge,
+      swipeFromEdge: swipeFromEdge,
       transitionBuilder: transitionBuilder,
     );
   }

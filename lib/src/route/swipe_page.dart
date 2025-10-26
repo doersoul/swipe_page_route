@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipe_page_route/src/route/swipe_page_route.dart';
 
 class SwipePage<T> extends Page<T> {
-  final bool canOnlySwipeFromEdge;
+  final bool swipeFromEdge;
 
   final Duration? transitionDuration;
 
@@ -21,7 +21,7 @@ class SwipePage<T> extends Page<T> {
   final WidgetBuilder builder;
 
   SwipePage({
-    this.canOnlySwipeFromEdge = false,
+    this.swipeFromEdge = false,
     this.transitionDuration,
     this.reverseTransitionDuration,
     SwipeTransitionBuilder? transitionBuilder,
@@ -41,7 +41,7 @@ class SwipePage<T> extends Page<T> {
   @override
   Route<T> createRoute(BuildContext context) {
     return SwipePageRoute(
-      canOnlySwipeFromEdge: canOnlySwipeFromEdge,
+      swipeFromEdge: swipeFromEdge,
       transitionDuration: transitionDuration,
       reverseTransitionDuration: reverseTransitionDuration,
       transitionBuilder: transitionBuilder,
