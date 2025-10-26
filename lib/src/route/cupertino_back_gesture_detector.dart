@@ -52,21 +52,27 @@ class _CupertinoBackGestureDetectorState<T>
         if (_backGestureController?.navigator.mounted ?? false) {
           _backGestureController?.navigator.didStopUserGesture();
         }
+
         _backGestureController = null;
       });
     }
+
     super.dispose();
   }
 
   void _handleDragStart(DragStartDetails details) {
     assert(mounted);
+
     assert(_backGestureController == null);
+
     _backGestureController = widget.onStartPopGesture();
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
     assert(mounted);
+
     assert(_backGestureController != null);
+
     _backGestureController!.dragUpdate(
       _convertToLogical(details.primaryDelta! / context.size!.width),
     );
@@ -74,12 +80,15 @@ class _CupertinoBackGestureDetectorState<T>
 
   void _handleDragEnd(DragEndDetails details) {
     assert(mounted);
+
     assert(_backGestureController != null);
+
     _backGestureController!.dragEnd(
       _convertToLogical(
         details.velocity.pixelsPerSecond.dx / context.size!.width,
       ),
     );
+
     _backGestureController = null;
   }
 
@@ -107,12 +116,14 @@ class _CupertinoBackGestureDetectorState<T>
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
+
     // For devices with notches, the drag area needs to be larger on the side
     // that has the notch.
     final double dragAreaWidth = switch (Directionality.of(context)) {
       TextDirection.rtl => MediaQuery.paddingOf(context).right,
       TextDirection.ltr => MediaQuery.paddingOf(context).left,
     };
+
     return Stack(
       fit: StackFit.passthrough,
       children: <Widget>[

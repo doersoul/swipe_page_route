@@ -68,7 +68,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    ValueGetter<bool> canOnlySwipeFromEdge = _defaultCanOnlySwipeFromEdge,
+    bool canOnlySwipeFromEdge = false,
     SwipeTransitionBuilder? transitionBuilder,
   }) {
     final Widget wrappedChild;
@@ -76,14 +76,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     if (route.fullscreenDialog || route.isFirst) {
       wrappedChild = child;
     } else {
-      final bool onlySwipeFromEdge = canOnlySwipeFromEdge();
-      if (onlySwipeFromEdge) {
-        wrappedChild = CupertinoBackGestureDetector<T>(
-          enabledCallback: () => _isPopGestureEnabled(route),
-          onStartPopGesture: () => _startPopGesture(route),
-          child: child,
-        );
-      } else {
+      if (!canOnlySwipeFromEdge) {
         wrappedChild = CupertinoBackGestureDetector<T>(
           enabledCallback: () => _isPopGestureEnabled(route),
           onStartPopGesture: () => _startPopGesture(route),
@@ -92,6 +85,12 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
             onStartPopGesture: () => _startPopGesture(route),
             child: child,
           ),
+        );
+      } else {
+        wrappedChild = CupertinoBackGestureDetector<T>(
+          enabledCallback: () => _isPopGestureEnabled(route),
+          onStartPopGesture: () => _startPopGesture(route),
+          child: child,
         );
       }
     }
@@ -106,8 +105,6 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       wrappedChild,
     );
   }
-
-  static bool _defaultCanOnlySwipeFromEdge() => false;
 
   // Copied and modified from `CupertinoRouteTransitionMixin`
   static bool _isPopGestureEnabled<T>(PageRoute<T> route) {
@@ -153,12 +150,14 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
   }
 
   @override
-  Duration get transitionDuration =>
-      _transitionDuration ?? super.transitionDuration;
+  Duration get transitionDuration {
+    return _transitionDuration ?? super.transitionDuration;
+  }
 
   @override
-  Duration get reverseTransitionDuration =>
-      _reverseTransitionDuration ?? super.reverseTransitionDuration;
+  Duration get reverseTransitionDuration {
+    return _reverseTransitionDuration ?? super.reverseTransitionDuration;
+  }
 
   @override
   bool get popGestureEnabled => _isPopGestureEnabled(this);
@@ -176,7 +175,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       animation,
       secondaryAnimation,
       child,
-      canOnlySwipeFromEdge: () => canOnlySwipeFromEdge,
+      canOnlySwipeFromEdge: canOnlySwipeFromEdge,
       transitionBuilder: transitionBuilder,
     );
   }

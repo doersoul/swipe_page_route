@@ -24,7 +24,7 @@ class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
       animation,
       secondaryAnimation,
       child,
-      canOnlySwipeFromEdge: () => canOnlySwipeFromEdge,
+      canOnlySwipeFromEdge: canOnlySwipeFromEdge,
       transitionBuilder: transitionBuilder,
     );
   }

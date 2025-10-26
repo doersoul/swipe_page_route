@@ -57,10 +57,13 @@ class SwipeBackGestureController<T> {
 
     if (controller.isAnimating) {
       late AnimationStatusListener animationStatusCallback;
+
       animationStatusCallback = (AnimationStatus status) {
         navigator.didStopUserGesture();
+
         controller.removeStatusListener(animationStatusCallback);
       };
+
       controller.addStatusListener(animationStatusCallback);
     } else {
       navigator.didStopUserGesture();

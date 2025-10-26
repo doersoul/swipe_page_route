@@ -100,14 +100,17 @@ class _SwipeBackGestureDetectorState<T>
     };
   }
 
+  bool _checkStartedCallback() {
+    return _backGestureController != null || dragUnderway;
+  }
+
   PageDragRecognizer _gestureRecognizerConstructor() {
     final TextDirection textDirection = Directionality.of(context);
 
     return PageDragRecognizer(
       debugOwner: this,
       directionality: textDirection,
-      checkStartedCallback: () =>
-          _backGestureController != null || dragUnderway,
+      checkStartedCallback: _checkStartedCallback,
       enabledCallback: widget.enabledCallback,
       detectionArea: () => null,
     );
