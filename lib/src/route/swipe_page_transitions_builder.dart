@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:swipe_page_route/src/route/swipe_page_route.dart';
 
 class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
-  final bool swipeFromEdge;
+  final SwipeBackGestureMode backGestureMode;
   final SwipeTransitionBuilder? transitionBuilder;
 
   const SwipePageTransitionsBuilder({
-    this.swipeFromEdge = false,
+    this.backGestureMode = SwipeBackGestureMode.page,
     this.transitionBuilder,
   });
 
@@ -24,7 +24,7 @@ class SwipePageTransitionsBuilder extends PageTransitionsBuilder {
       animation,
       secondaryAnimation,
       child,
-      swipeFromEdge: swipeFromEdge,
+      backGestureMode: backGestureMode,
       transitionBuilder: transitionBuilder,
     );
   }

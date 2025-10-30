@@ -12,8 +12,10 @@ typedef SwipeTransitionBuilder =
       Widget child,
     );
 
+enum SwipeBackGestureMode { edge, page, all }
+
 class SwipePageRoute<T> extends CupertinoPageRoute<T> {
-  bool swipeFromEdge;
+  SwipeBackGestureMode backGestureMode;
 
   final Duration? _transitionDuration;
 
@@ -22,7 +24,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
   final SwipeTransitionBuilder transitionBuilder;
 
   SwipePageRoute({
-    this.swipeFromEdge = false,
+    this.backGestureMode = SwipeBackGestureMode.page,
     Duration? transitionDuration,
     Duration? reverseTransitionDuration,
     SwipeTransitionBuilder? transitionBuilder,
@@ -68,7 +70,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child, {
-    bool swipeFromEdge = false,
+    SwipeBackGestureMode backGestureMode = SwipeBackGestureMode.page,
     SwipeTransitionBuilder? transitionBuilder,
   }) {
     final Widget wrappedChild;
@@ -76,22 +78,32 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
     if (route.fullscreenDialog || route.isFirst) {
       wrappedChild = child;
     } else {
-      if (!swipeFromEdge) {
-        wrappedChild = CupertinoBackGestureDetector<T>(
-          enabledCallback: () => _isPopGestureEnabled(route),
-          onStartPopGesture: () => _startPopGesture(route),
-          child: SwipeBackGestureDetector<T>(
+      switch (backGestureMode) {
+        case SwipeBackGestureMode.edge:
+          wrappedChild = CupertinoBackGestureDetector<T>(
             enabledCallback: () => _isPopGestureEnabled(route),
             onStartPopGesture: () => _startPopGesture(route),
             child: child,
-          ),
-        );
-      } else {
-        wrappedChild = CupertinoBackGestureDetector<T>(
-          enabledCallback: () => _isPopGestureEnabled(route),
-          onStartPopGesture: () => _startPopGesture(route),
-          child: child,
-        );
+          );
+          break;
+        case SwipeBackGestureMode.page:
+          wrappedChild = SwipeBackGestureDetector<T>(
+            enabledCallback: () => _isPopGestureEnabled(route),
+            onStartPopGesture: () => _startPopGesture(route),
+            child: child,
+          );
+          break;
+        case SwipeBackGestureMode.all:
+          wrappedChild = CupertinoBackGestureDetector<T>(
+            enabledCallback: () => _isPopGestureEnabled(route),
+            onStartPopGesture: () => _startPopGesture(route),
+            child: SwipeBackGestureDetector<T>(
+              enabledCallback: () => _isPopGestureEnabled(route),
+              onStartPopGesture: () => _startPopGesture(route),
+              child: child,
+            ),
+          );
+          break;
       }
     }
 
@@ -175,7 +187,7 @@ class SwipePageRoute<T> extends CupertinoPageRoute<T> {
       animation,
       secondaryAnimation,
       child,
-      swipeFromEdge: swipeFromEdge,
+      backGestureMode: backGestureMode,
       transitionBuilder: transitionBuilder,
     );
   }
